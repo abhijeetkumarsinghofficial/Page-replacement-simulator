@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>    
+
+    <title>Document</title>
+</head>
+<body>
+
+    <nav class="nav nav-pills nav-fill">
+        <a class="nav-item nav-link" href="index.html">FIFO</a>
+        <a class="nav-item nav-link active" href="optimal.html">OPT</a>
+        <a class="nav-item nav-link" href="lru.html">LRU</a>
+        
+      </nav>
+
+      <br><br>
+    <div class="container">
+          
+           
+     
+
+        <div class="main" >
+            <form>
+                <div class="form-group row">
+                  <label for="formGroupExampleInput" class="col-sm-2 col-form-label">Frames</label>
+                  <div class="col-sm-10">
+                    <input id="frames" type="number" class="form-control" id="formGroupExampleInput" placeholder="Number of Frames">
+        
+                  </div>
+        
+                </div>
+                <div class="form-group row">
+                  <label for="formGroupExampleInput2" class="col-sm-2 col-form-label">String</label>
+                  <div class="col-sm-10">
+                    <input id="rs" type="text" class="form-control" id="formGroupExampleInput2" placeholder="2 21 23 1">
+        
+        
+                  </div>
+        
+                </div>
+              </form>
+        
+            
+            
+        </div>
+        <center>
+            <button type="button" class="btn btn-primary" onclick="optimal()"  >Calculate</button>
+        
+        </center>
+        
+                  
+                   <br>
+                   <h3 id="head1" ></h3>
+        
+                   <div class="grid-container">
+        
+                    <div class="grid-child purple">
+                       
+                        <h5 id="subh0"></h5>
+                        <h5 id="subh01"></h5>
+                        <h5 id="subh1"></h5>
+                        <h5 id="subh2"></h5>
+                        <h5 id="subh3"></h5>
+                        <h5 id="subh4"></h5>
+                    </div>
+                
+                    <div class="grid-child green">
+                        
+                                  
+                <h5 id="rsnum"></h5>
+                <h5 id="fnum"></h5>
+                <h5 id="hits"></h5>
+                <h5 id="miss"></h5>
+                <h5 id="ratioh"></h5>
+                <h5 id="ratiom"></h5>
+                    </div>
+                  
+                </div>
+        
+                <h2 id="head2" ></h2>
+        
+ 
+        
+            
+                </div>
+        <center>
+            <div id="div1" class="table-responsive" style="width:80vw;margin:auto;text-align:center"></div>
+
+        
+        </center>
+        
+               
+        
+        
+        
+        <script>
+        
+    
+
+
+var count = 0;
+	var pages = [];
+	var pf;
+	var ph;
+	var f;
+	var rs;
+	var txt;
+
+	function optimal() {
+		f = document.getElementById("frames").value;
+		rs1 = document.getElementById("rs").value;
+        rs=rs1.split(" ");
+		var isnum = /^\d+$/.test(rs);
+        let length = rs.length;
+        let length2 = document.getElementById("frames").value;
+			
+		if (f <= 0) {
+			alert("Enter Frame");
+			return;
+		} 
+        else if (rs.length == 0) {
+            alert("Enter String");
+            return;
+        }
+        // else if (!isnum) {
+		// 	alert("Invalid Input");
+		// 	return;
+		// }
+
+		console.log(f);
+		console.log(rs);
+		var prev;
+		pf = 0;
+		ph = 0;
+		var k = 0;
+		var l;
+		var farthest;
+		var index = -9999;
+		var i, row = Number(f) + 1,
+			j, col = rs.length;
+
+		pages = new Array(row);
+		for (i = 0; i < row; i++)
+			pages[i] = new Array(col);
+
+		for (i = 0; i < row - 1; i++) {
+			for (j = 0; j < col; j++)
+				pages[i][j] = "*";
+		}
+
+		for (j = 0; j < col; j++) {
+			var smallest = -1;
+			var flag = false;
+			if (j > 0) {
+				for (i = 0; i < row - 1; i++)
+					pages[i][j] = pages[i][j - 1];
+			}
+			for (i = 0; i < row - 1; i++) {
+				if (rs[k] == pages[i][j])
+					flag = true;
+			}
+			if (flag == false) {
+				for (i = 0; i < row - 1; i++) {
+					if (pages[i][j] == "*") {
+						smallest = i;
+						break;
+					}
+				}
+				if (smallest != -1) {
+					pages[smallest][j] = rs[k];
+				} else {
+					index = -9999;
+					for (i = 0; i < row - 1; i++) {
+						for (l = j + 1; l < col; l++) {
+							if (pages[i][j] == rs[l]) {
+								farthest = l;
+								break;
+							} else
+								farthest = -2;
+						}
+						if (index < farthest)
+							index = farthest;
+						if (farthest == -2)
+							break;
+					}
+					if (farthest != -2) {
+						for (i = 0; i < row - 1; i++) {
+							if (pages[i][j] == rs[index])
+								break;
+						}
+					}
+					pages[i][j] = rs[k];
+				}
+				pages[row - 1][j] = "PF";
+				k++;
+				pf++;
+				console.log("pf=", pf);
+			} else {
+				ph++;
+				k++;
+				console.log("ph=", ph);
+				pages[row - 1][j] = "PH";
+			}
+		}
+		txt = " ";
+		var real;
+		var m = 0;
+		var $table = $("<table border='2'></table>");
+		$table.addClass('table');
+		$tbody = $("<tbody></tbody>");
+		for (i = 0; i < row; i++) {
+			var line = $("<tr></tr>");
+			// line.css({'background-color': getRandomColor()});
+			for (j = 0; j < col; j++) {
+
+				if (i == row - 1) {
+
+
+					if (("PH".localeCompare(pages[i][j]) == 0)) {
+						line.append('<td style="color:#0080ff">' + 'PageHit' + '</td>');
+					} else {
+						line.append('<td style="color:red">' + 'PageFault' + '</td>');
+					}
+
+					$tbody.prepend(line);
+
+				} else {
+					line.append($("<td></td>").html(pages[i][j] + ""));
+					$tbody.prepend(line);
+				}
+
+
+			}
+		}
+
+		$table.append($tbody);
+		$table.appendTo($("#div1"));
+
+		txt = txt + "\n";
+
+
+        $("#head1").html('<p style="color:#0080ff">' + "<b>Summary OPT Algorithm</b>" )
+			
+            $("#head2").html('<p style="color:#0080ff">' + "<b>Solution Visualization</b>" )
+
+
+            document.getElementById("subh1").innerHTML = "Hits";
+            document.getElementById("subh2").innerHTML = "Miss";
+            document.getElementById("subh3").innerHTML = "Hit Ratio";
+            document.getElementById("subh4").innerHTML = "Fault Ratio";
+            document.getElementById("subh0").innerHTML = "Total References";
+            document.getElementById("subh01").innerHTML = "Total Frames";
+            
+
+        let hitRatio = ph / (pf + ph);
+            let missRatio = pf / (pf + ph);
+            console.log("Hit Ratio: " + hitRatio);
+            console.log("Miss Ratio: " + missRatio);
+            document.getElementById("hits").innerHTML =  ph;
+            document.getElementById("miss").innerHTML =  pf;
+            document.getElementById("ratioh").innerHTML =  hitRatio;
+            document.getElementById("ratiom").innerHTML =  missRatio;
+            document.getElementById("rsnum").innerHTML =  length;
+            document.getElementById("fnum").innerHTML =  length2;
+	}
+</script>
+        
+        </script>
+        
+
+
+</body>
+</html>
