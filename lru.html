@@ -273,8 +273,11 @@
 
             let hitRatio = ph / (pf + ph);
             let missRatio = pf / (pf + ph);
-            console.log("Hit Ratio: " + hitRatio);
-            console.log("Miss Ratio: " + missRatio);
+			hitRatio= hitRatio.toPrecision(3);
+			missRatio= missRatio.toPrecision(3);
+
+            // console.log("Hit Ratio: " + hitRatio);
+            // console.log("Miss Ratio: " + missRatio);
             document.getElementById("hits").innerHTML =  ph;
             document.getElementById("miss").innerHTML =  pf;
             document.getElementById("ratioh").innerHTML =  hitRatio;
