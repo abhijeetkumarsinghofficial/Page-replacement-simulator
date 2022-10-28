@@ -254,9 +254,13 @@ var count = 0;
 
 
             let hitRatio = ph / (pf + ph);
+
             let missRatio = pf / (pf + ph);
-            console.log("Hit Ratio: " + hitRatio);
-            console.log("Miss Ratio: " + missRatio);
+
+
+			hitRatio= hitRatio.toPrecision(3);
+			missRatio= missRatio.toPrecision(3);
+
             document.getElementById("hits").innerHTML =  ph;
             document.getElementById("miss").innerHTML =  pf;
             document.getElementById("ratioh").innerHTML =  hitRatio;
@@ -267,24 +271,7 @@ var count = 0;
 	
 			}
 	
-			function getRandomColor() {
-				m = m + 1;
-				var color = '';
-				if (m == 1) {
-					color = 'blue';
-				}
-				if (m == 2) {
-					color = 'yellow';
-				}
-				if (m == 3) {
-					color = 'pink';
-				}
-				if (m == 4) {
-					color = 'white';
-				}
-	
-				return color;
-			}
+		
 		}
 
 
